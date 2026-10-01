@@ -18,7 +18,10 @@ const FormPeserta = ({ onSimpan, onCancel, pesertaEdit }) => {
 
   const handleSimpan = (e) => {
     e.preventDefault();
-    
+    if (!nama.trim() || !jurusan.trim()) {
+      alert("Nama dan jurusan tidak boleh kosong");
+      return;
+    }
     // Logic untuk handle simpan data peserta, misalnya mengirim data ke server atau menyimpan di state.
     onSimpan({
       id: pesertaEdit ? pesertaEdit.id : Date.now(),
