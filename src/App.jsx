@@ -1,55 +1,28 @@
-import { useState } from "react";
-import DataPeserta from "./component/DataPeserta";
-import { Peserta } from "./component/Peserta";
-import FormPeserta from "./component/FormPeserta";
+// import heroImg from "./assets/hero.png";
+// import reactLogo from "./assets/react.svg";
+// import viteLogo from "/vite.svg";
+// import { useState } from "react";
+// import DataPeserta from "./component/DataPeserta";
+// import { Peserta } from "./component/Peserta";
+// import FormPeserta from "./component/FormPeserta";
+import Login from "./pages/Login";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import Dashboard from "./pages/Dashboard";
+import MainLayout from "./pages/MainLayout";
+import ListUser from "./pages/user/List";
 
 function App() {
-  const [pesertaList, setPesertaList] = useState(Peserta);
-  const [editPeserta, setEditPeserta] = useState(null);
-  const handleSimpan = (dataForm) => {
-    if (editPeserta) {
-      // Jika editPeserta ada, berarti kita sedang mengedit data peserta
-      setPesertaList(
-        pesertaList.map((peserta) =>
-          peserta.id === dataForm.id ? dataForm : peserta,
-        ),
-      );
-      setEditPeserta(null); // Reset editPeserta setelah selesai mengedit
-    } else {
-      // Jika editPeserta tidak ada, berarti kita sedang menambahkan data peserta baru
-      setPesertaList([...pesertaList, dataForm]);
-    }
-    console.log(dataForm);
-  };
-
-  const handleCancel = (id) => {
-    setPesertaList(pesertaList.filter((peserta) => peserta.id !== id));
-    if (id === editPeserta?.id) {
-      setEditPeserta(null);
-    }
-  };
-
-  // const handleEdit = (pesertaToEdit) => {
-  //   setEditPeserta(pesertaToEdit);
-  // };
-
   return (
-    <>
-      <FormPeserta
-        onSimpan={handleSimpan}
-        onCancel={handleCancel}
-        pesertaEdit={editPeserta}
-      />
-      {/* map = untuk looping */}
-      {pesertaList.map((peserta) => (
-        <DataPeserta
-          key={peserta.id} // unik key untuk setiap item di dalam list, agar React bisa membedakan setiap item di dalam list.
-          peserta={peserta}
-          onCancel={handleCancel}
-          onEdit={setEditPeserta}
-        />
-      ))}
-    </>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Login />} />
+        <Route element={<MainLayout />}>
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/users" element={<ListUser />} />
+        </Route>
+        <Route path="/login" element={<Navigate to="/login" replace />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
