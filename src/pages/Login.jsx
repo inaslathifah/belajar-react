@@ -1,6 +1,17 @@
 import { useState } from "react";
-import { Container, Form, Card, Button } from "react-bootstrap";
+// import { Container, Form, Card, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "../component/ui/card";
+import { Input } from "../component/ui/input";
+import { Label } from "@/component/ui/label";
+import { Button } from "@/component/ui/button";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -11,73 +22,81 @@ export default function Login() {
   const [formData, setFormData] = useState(_initialForm);
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleChange = (e) => {
+    console.log(`input change ${e.target.name} = ${e.target.value}`);
     // PreventDefault itu untuk mencegah halaman melakukan refresh ketika form di submit.
     // Dia adalah parameter dari event, jadi kita bisa memanggilnya di dalam function handleSubmit.
     setFormData((prev) => ({
       ...prev,
       [e.target.name]: e.target.value,
     }));
-    e.preventDefault();
-    console.log("Form submitted:", formData);
-    //
   };
 
   const handleLogin = (e) => {
     e.preventDefault();
     setIsLoading(true);
     setTimeout(() => {
-      alert(`Login Successful!`);
+      // alert(`Login Successful!`);
       setIsLoading(false);
       navigate("/dashboard");
     }, 1000);
   };
 
   return (
-    <Container className="d-flex justify-content-center align-items-center min-vh-100">
-      <div className="w-100 d-flex align-items-center justify-content-center">
-        <Card className="shadow" style={{ width: "400px" }}>
-          <Card.Body className="p-4">
-            <h2 className="font-weight-bold text-center mb-4">Login Form</h2>
+    <div className="flex min-h-screen items-center justify-center bg-muted/40 p-4 bg-black">
+      <div className="w-full max-w-md">
+        <div className="mb-6 flex flex-col items-center">
+          {/* <div className="mb-2 flex h-12 w-12 items-center justify-center rounded-sm shadow"></div> */}
+          <h1 className="text-2xl font-bold tracking-tight">
+            Point of Sales | PPKDJP
+          </h1>
+          <p className="text-sm text-muted ">Point of Sales</p>
+        </div>
 
-            <Form onSubmit={handleLogin}>
-              <Form.Group className="mb-3" controlId="formBasicEmail">
-                <Form.Label>Email Address</Form.Label>
-                <Form.Control
+        <Card className="shadow-lg border-border p-6">
+          <CardHeader className="space-y-1 pb-4">
+            <CardTitle className="text-lg font-semibold">
+              Sign in Your Account
+            </CardTitle>
+            <CardDescription>Enter your Credential</CardDescription>
+          </CardHeader>
+
+          <form onSubmit={handleLogin}>
+            <CardContent className="space-y-4">
+              <div className="space-y-2">
+                <Label>Email</Label>
+                <Input
+                  id="email"
                   name="email"
                   type="email"
-                  placeholder="Enter email"
                   value={formData.email}
-                  onChange={handleSubmit}
+                  onChange={handleChange}
+                  placeholder="Enter your Email"
                   required
+                  autoFocus
                 />
-              </Form.Group>
-
-              <Form.Group className="mb-3" controlId="formBasicPassword">
-                <Form.Label>Password</Form.Label>
-                <Form.Control
+              </div>
+              <div className="space-y-2">
+                <Label>Password</Label>
+                <Input
+                  id="password"
                   name="password"
                   type="password"
-                  placeholder="Password"
                   value={formData.password}
-                  onChange={handleSubmit}
+                  onChange={handleChange}
+                  placeholder="Enter your Password"
                   required
                 />
-              </Form.Group>
-
-              <Button
-                variant="primary"
-                type="submit"
-                disabled={isLoading}
-                className="w-100"
-                onClick={handleLogin}
-              >
-                {isLoading ? "Logging in..." : "Submit"}
+              </div>
+            </CardContent>
+            <CardFooter className="flex flex-col gap-3 pt-3">
+              <Button type="submit" className="rounded-lg w-full">
+                {isLoading ? "Loading..." : "Sign in"}
               </Button>
-            </Form>
-          </Card.Body>
+            </CardFooter>
+          </form>
         </Card>
       </div>
-    </Container>
+    </div>
   );
 }

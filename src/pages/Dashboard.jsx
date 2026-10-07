@@ -1,43 +1,56 @@
-import { Card, Container, Row, Col } from "react-bootstrap";
-import AppNavbar from "../component/AppNavbar";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "../component/ui/card";
+import { DollarSign } from "lucide-react";
 
 const Dashboard = () => {
   return (
     <>
-      <Container className="d-flex justify-content-center align-items-center min-vh-100">
-        <Row className="g-4">
-          <Col md={4}>
-            <Card className="shadow-sm p-3 border-0">
-              <Card.Subtitle className="mb-2 text-muted">
-                All Sales
-              </Card.Subtitle>
-              <Card.Title className="fs-3 fw-bold text-success">
-                Rp 50.000.000
-              </Card.Title>
+      <div className="min-h-screen bg-muted/30">
+        <main className="max-w-6xl mx-auto p-8 space-y-6">
+          <div>
+            <h2 className="text-2xl font-bold tracking-tight">Dashboard POS</h2>
+            <p className="text-sm text-muted-foreground">
+              Welcome to Dashboard
+            </p>
+          </div>
+
+          <div className="grid sm:grid-cols-3 gap-4">
+            <Card className="shadow-lg border-border p-6">
+              <CardHeader className="flex flex-row items-center justify-between pb-2">
+                <CardTitle className="text-sm font-medium">
+                  Today Sales
+                </CardTitle>
+                {/* icon */}
+                <DollarSign className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
             </Card>
-          </Col>
-          <Col md={4}>
-            <Card className="shadow-sm p-3 border-0">
-              <Card.Subtitle className="mb-2 text-muted">
-                Pending Orders
-              </Card.Subtitle>
-              <Card.Title className="fs-3 fw-bold text-warning">
-                Rp 25.000.000
-              </Card.Title>
+            <Card className="shadow-lg border-border p-6">
+              <CardHeader className="flex flex-row items-center justify-between pb-2">
+                <CardTitle className="text-sm font-medium">
+                  Today Sales
+                </CardTitle>
+                {/* icon */}
+                <DollarSign className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
             </Card>
-          </Col>
-          <Col md={4}>
-            <Card className="shadow-sm p-3 border-0">
-              <Card.Subtitle className="mb-2 text-muted">
-                Completed Orders
-              </Card.Subtitle>
-              <Card.Title className="fs-3 fw-bold text-info">
-                Rp 75.000.000
-              </Card.Title>
+            <Card className="shadow-lg border-border p-6">
+              <CardHeader className="flex flex-row items-center justify-between pb-2">
+                <CardTitle className="text-sm font-medium">
+                  Today Sales
+                </CardTitle>
+                {/* icon */}
+                <DollarSign className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
             </Card>
-          </Col>
-        </Row>
-      </Container>
+          </div>
+        </main>
+      </div>
     </>
   );
 };

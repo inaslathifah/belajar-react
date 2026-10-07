@@ -1,160 +1,143 @@
 import { useState } from "react";
-import { Card, Button, Form, Table, Modal } from "react-bootstrap";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/component/ui/card";
+import { Button } from "@/component/ui/button";
+// import { Card, Button, Form, Table, Modal } from "react-bootstrap";
+import AppModal from "@/component/AppModal";
 
 const dataUsers = [
   {
     id: 1,
     name: "John Doe",
     email: "john.doe@example.com",
-    status: "Active",
   },
   {
     id: 2,
     name: "Jane Smith",
     email: "jane.smith@example.com",
-    status: "Inactive",
   },
   {
     id: 3,
     name: "Bob Johnson",
     email: "bob.johnson@example.com",
-    status: "Active",
   },
 ];
 
 const ListUser = () => {
-  const [showModal, setShowModal] = useState(false);
-  const [users, setUsers] = useState(dataUsers);
-
-  const handleCloseModal = () => {
-    setShowModal(false);
-  };
-  const handleShowModal = () => {
-    setShowModal(true);
-  };
-
-  const [formData, setFormData] = useState({
+  const _initForm = {
     id: null,
     name: "",
     email: "",
     password: "",
-    // status: "",
-  });
+    status: "",
+  };
+  const [showModal, setShowModal] = useState(false);
+  const [users, setUsers] = useState(dataUsers);
+  const [formData, setFormData] = useState(_initForm);
+  const [isEdit, setIsEdit] = useState(false);
 
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+  // const handleCloseModal = () => {
+  //   setShowModal(false);
+  // };
+
+  const handleShowModal = () => {
+    setShowModal(true);
+    setFormData(_initForm);
+    setIsEdit(false);
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleEditModal = (user) => {
+    setShowModal(true);
+    setIsEdit(true);
+    setFormData({ ...user, password: "" });
+  };
 
-    const newUser = {
-      ...formData,
-      id: Date.now(),
-    };
-
-    setUsers([...users, newUser]);
-    setShowModal(false);
+  const handleDelete = (id) => {
+    const confirmation = window.confirm("Apa kamu yakin ingin menghapusnya?");
+    if (confirmation) {
+      setUsers(users.filter((u) => u.id !== id));
+    }
   };
 
   return (
     <>
-      <Card className="shadow-sm p-3 border-0">
-        <Card.Body>
+      <Card className="shadow-sm border-border p-6">
+        <CardContent className="p-0">
           <div className="d-flex justify-content-between align-items-center mb-3">
             <div>
               <h4 className="mb-0 fw-bold">Data User</h4>
             </div>
-            <button variant="primary" onClick={handleShowModal}>
+            <Button variant="primary" onClick={handleShowModal}>
               Create New User
-            </button>
+            </Button>
           </div>
-          <Table
+          <table
             striped
             bordered
             hover
             responsive
-            className="align-middle mb-0"
+            className="w-full text-left text-sm align-middle mb-0"
           >
-            <thead>
+            <thead className="border-y bg-muted/30 text-xs uppercase text-muted-foreground">
               <tr>
-                <th>No</th>
-                <th>Nama</th>
-                <th>Email</th>
-                <th>Status</th>
-                <th>Aksi</th>
+                <th className="px-6 py-3 font-medium">No</th>
+                <th className="px-6 py-3 font-medium">Nama</th>
+                <th className="px-6 py-3 font-medium">Email</th>
+                <th className="px-6 py-3 font-medium">Status</th>
+                <th className="px-6 py-3 font-medium">Aksi</th>
               </tr>
             </thead>
-            <tbody>
-              {users.map((user, index) => (
-                <tr key={index}>
-                  <td>{index + 1}</td>
-                  <td>{user.name}</td>
-                  <td>{user.email}</td>
-                  <td>{user.status}</td>
-                  <td>
-                    <Button variant="warning" size="sm" className="me-2">
-                      Edit
-                    </Button>
-                    <Button variant="danger" size="sm" className="me-2">
-                      Delete
-                    </Button>
+            <tbody className="divide-y divide-border">
+              {users.length > 0 ? (
+                users.map((user, index) => (
+                  <tr
+                    key={index}
+                    className="hover:bg-gray-300/50 transition-colors"
+                  >
+                    <td className="px-4 py-6 whitespace-nowrap">{index + 1}</td>
+                    <td>{user.name}</td>
+                    <td>{user.email}</td>
+                    <td>{user.status}</td>
+                    <td className="px-4 py-6 text-right whitespace-nowrap">
+                      <Button
+                        onClick={() => handleEditModal(user)}
+                        variant="warning"
+                        size="sm"
+                        className="me-2"
+                      >
+                        Edit
+                      </Button>
+                      <Button
+                        onClick={() => handleDelete(user.id)}
+                        variant="danger"
+                        size="sm"
+                        className="me-2"
+                      >
+                        Delete
+                      </Button>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan={5} className="text-center py-4 text-muted">
+                    Belum ada data user
                   </td>
                 </tr>
-              ))}
+              )}
             </tbody>
-          </Table>
+          </table>
           {/* <div className="table-responsive"></div> */}
-        </Card.Body>
+        </CardContent>
       </Card>
 
-      <Modal show={showModal} onHide={handleCloseModal}>
-        <Modal.Header closeButton>
-          <Modal.Title>Create New User</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form>
-            <Form.Group className="mb-3" controlId="formName">
-              <Form.Label>Nama</Form.Label>
-              <Form.Control
-                value={formData.name}
-                type="text"
-                name="name"
-                placeholder="Masukkan nama"
-              />
-            </Form.Group>
-            <Form.Group className="mb-3" controlId="formEmail">
-              <Form.Label>Email</Form.Label>
-              <Form.Control
-                value={formData.email}
-                type="email"
-                name="email"
-                placeholder="Masukkan email"
-              />
-            </Form.Group>
-            <Form.Group className="mb-3" controlId="formPassword">
-              <Form.Label>Password</Form.Label>
-              <Form.Control
-                value={formData.password}
-                type="password"
-                name="password"
-                placeholder="Masukkan password"
-              />
-            </Form.Group>
-          </Form>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleCloseModal}>
-            Close
-          </Button>
-          <Button type="submit" variant="primary" onClick={handleCloseModal}>
-            Save Changes
-          </Button>
-        </Modal.Footer>
-      </Modal>
+      <AppModal className=""></AppModal>
     </>
   );
 };

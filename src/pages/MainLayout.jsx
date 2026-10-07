@@ -1,23 +1,34 @@
 import { Outlet } from "react-router-dom";
-import { Container } from "react-bootstrap";
-import AppNavbar from "../component/AppNavbar";
+import {
+  SidebarProvider,
+  SidebarInset,
+  SidebarTrigger,
+} from "@/component/ui/sidebar";
+import { Separator } from "@/component/ui/separator";
+import { AppSidebar } from "@/component/AppSidebar";
 
 export default function MainLayout() {
   return (
-    <div className="d-flex flex-column min-vh-100 bg-light">
-      <AppNavbar />
-      <main className="flex-grow-1 pb-4">
-        <Container className="py-4">
+    <SidebarProvider>
+      {/* Sidebar Navigasi */}
+      <AppSidebar />
+
+      {/* Konten Utama */}
+      <SidebarInset className="min-w-0">
+        {/* Header Bar */}
+        <header className="flex h-14 shrink-0 items-center gap-2 border-b bg-background px-4">
+          <SidebarTrigger className="-ml-1" />
+          <Separator orientation="vertical" className="mr-2 h-4" />
+          <span className="text-sm font-medium text-muted-foreground">
+            Dashboard
+          </span>
+        </header>
+
+        {/* Konten Halaman */}
+        <main className="flex-1 p-6 bg-muted/20">
           <Outlet />
-        </Container>
-      </main>
-      <footer className="bg-white border-top py-3 text-muted text-center mt-auto">
-        <Container className="text-center">
-          <small>
-            &copy; {new Date().getFullYear()} My App. All rights reserved.
-          </small>
-        </Container>
-      </footer>
-    </div>
+        </main>
+      </SidebarInset>
+    </SidebarProvider>
   );
 }
